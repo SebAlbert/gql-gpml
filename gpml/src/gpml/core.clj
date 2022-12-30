@@ -4,7 +4,8 @@
 (def parse-gpml
   (insta/parser
    "STATEMENT = <WHITESPACE*> MATCH [<WHITESPACE+> WHERE] <WHITESPACE*>
-    MATCH = <'MATCH' WHITESPACE+> (NODE | EDGE | PATH)
+    MATCH = <'MATCH' WHITESPACE+> (EDGE | PATH)
+            { <WHITESPACE* ',' WHITESPACE*> (EDGE | PATH) }
     PATH = [VARIABLE <WHITESPACE* '=' WHITESPACE*>]
            NODE { <WHITESPACE*> EDGE <WHITESPACE*> NODE }
     NODE = <'('> [SPEC] <')'>
