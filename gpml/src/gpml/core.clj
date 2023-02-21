@@ -61,7 +61,7 @@
     mod = ARITH3 (<ws* '%' ws*> ARITH3)+
     <ARITH3> = VALUE | power
     power = VALUE (<ws* ('**' | '^') ws*> VALUE)
-    <VALUE> = LITERAL | REFERENCE
+    <VALUE> = LITERAL | REFERENCE | <'(' ws*> EXPR <ws* ')'>
     <LITERAL> = int | str
     int = ['-'] #'[1-9][0-9]*' | '0'
     str = <'\\''> #'[^\\']*' <'\\''>
