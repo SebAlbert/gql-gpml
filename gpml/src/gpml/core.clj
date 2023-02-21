@@ -3,11 +3,11 @@
 
 (def parse-gpml
   (insta/parser
-   "STATEMENT = <WHITESPACE*> MATCH [<WHITESPACE+> WHERE] <WHITESPACE*>
-    MATCH = <'MATCH' WHITESPACE+> (EDGE | PATH)
-            { <WHITESPACE* ',' WHITESPACE*> (EDGE | PATH) }
-    PATH = [VARIABLE <WHITESPACE* '=' WHITESPACE*>]
-           NODE { <WHITESPACE*> EDGE <WHITESPACE*> NODE }
+   "STATEMENT = <ws*> MATCH [<ws+> WHERE] <ws*>
+    MATCH = <'MATCH' ws+> (EDGE | PATH)
+            { <ws* ',' ws*> (EDGE | PATH) }
+    PATH = [VARIABLE <ws* '=' ws*>]
+           NODE { <ws*> EDGE <ws*> NODE }
     NODE = <'('> [SPEC] <')'>
     <EDGE> = EDGE_LEFT | EDGE_UNDIR | EDGE_RIGHT |
              EDGE_LEFT_OR_UNDIR | EDGE_UNDIR_OR_RIGHT |
@@ -19,18 +19,18 @@
     EDGE_UNDIR_OR_RIGHT = [ <'~['> SPEC <']'> ] <'~>'>
     EDGE_LEFT_OR_RIGHT = <'<-'> [ <'['> SPEC <']-'> ] <'>'>
     EDGE_ANY_DIRECTION = <'-'> [ <'['> SPEC <']-'> ]
-    <SPEC> = <WHITESPACE*> [VARIABLE] <WHITESPACE*> [LABEL]
-                  <WHITESPACE*> [WHERE] <WHITESPACE*>
+    <SPEC> = <ws*> [VARIABLE] <ws*> [LABEL]
+                  <ws*> [WHERE] <ws*>
     VARIABLE = IDENTIFIER
-    LABEL = <':' WHITESPACE*> LABEL_EXPR
-    <LABEL_EXPR> = <WHITESPACE*> (LABEL_LITERAL | LABEL_ANY | LABEL_CONJUNCTION
+    LABEL = <':' ws*> LABEL_EXPR
+    <LABEL_EXPR> = <ws*> (LABEL_LITERAL | LABEL_ANY | LABEL_CONJUNCTION
                    | LABEL_DISJUNCTION | LABEL_NEGATION |
-                   <'('> LABEL_EXPR <')'>) <WHITESPACE*>
+                   <'('> LABEL_EXPR <')'>) <ws*>
     LABEL_LITERAL = IDENTIFIER
     LABEL_ANY = '%'
     LABEL_CONJUNCTION = LABEL_EXPR (<'&'> LABEL_EXPR)+
     LABEL_DISJUNCTION = LABEL_EXPR (<'|'> LABEL_EXPR)+
     LABEL_NEGATION = <'!'> LABEL_EXPR
-    WHERE = <'WHERE' WHITESPACE+> #'.'* (* TODO *)
+    WHERE = <'WHERE' ws+> #'.'* (* TODO *)
     <IDENTIFIER> = #'[a-zA-Z][a-zA-Z0-9]*'
-    WHITESPACE = #'\\s'"))
+    ws = #'\\s'"))
