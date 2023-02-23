@@ -62,9 +62,10 @@
     <ARITH3> = VALUE | power
     power = VALUE (<ws* ('**' | '^') ws*> VALUE)
     <VALUE> = LITERAL | REFERENCE | <'(' ws*> EXPR <ws* ')'>
-    <LITERAL> = int | str
+    <LITERAL> = int | str | bool
     int = ['-'] #'[1-9][0-9]*' | '0'
     str = <'\\''> #'[^\\']*' <'\\''>
+    bool = 'TRUE' | 'FALSE'
     REFERENCE = IDENTIFIER <'.'> IDENTIFIER
     <IDENTIFIER> = #'[a-zA-Z][a-zA-Z0-9]*'
     ws = #'\\s'"
