@@ -1,6 +1,9 @@
 (ns gpml.core
   (:require [instaparse.core :as insta]))
 
+(defn spec->map [& args]
+  (reduce (fn [m n] (apply assoc m n)) {} args))
+
 (def parse-gpml
   (insta/parser
    "STATEMENT = <ws*> MATCH [<ws+> WHERE] <ws*>
@@ -8,19 +11,20 @@
             { <ws* ',' ws*> (EDGE | PATH) }
     PATH = [VARIABLE <ws* '=' ws*>]
            NODE { <ws*> EDGE <ws*> NODE }
-    NODE = <'('> [SPEC] <')'>
+    NODE = <'('> SPEC <')'>
     <EDGE> = EDGE_LEFT | EDGE_UNDIR | EDGE_RIGHT |
              EDGE_LEFT_OR_UNDIR | EDGE_UNDIR_OR_RIGHT |
              EDGE_LEFT_OR_RIGHT | EDGE_ANY_DIRECTION
-    EDGE_LEFT = <'<-'> [ <'['> SPEC <']-'> ]
-    EDGE_UNDIR = <'~'> [ <'['> SPEC <']~'> ]
-    EDGE_RIGHT = [ <'-['> SPEC <']'> ] <'->'>
-    EDGE_LEFT_OR_UNDIR = <'<~'> [ <'['> SPEC <']~'> ]
-    EDGE_UNDIR_OR_RIGHT = [ <'~['> SPEC <']'> ] <'~>'>
-    EDGE_LEFT_OR_RIGHT = <'<-'> [ <'['> SPEC <']-'> ] <'>'>
-    EDGE_ANY_DIRECTION = <'-'> [ <'['> SPEC <']-'> ]
-    <SPEC> = <ws*> [VARIABLE] <ws*> [LABEL]
+    EDGE_LEFT = <'<-'> (NO_SPEC | <'['> SPEC <']-'>)
+    EDGE_UNDIR = <'~'> (NO_SPEC | <'['> SPEC <']~'>)
+    EDGE_RIGHT = (NO_SPEC | <'-['> SPEC <']'>)  <'->'>
+    EDGE_LEFT_OR_UNDIR = <'<~'> (NO_SPEC | <'['> SPEC <']~'>)
+    EDGE_UNDIR_OR_RIGHT = (NO_SPEC | <'~['> SPEC <']'>)  <'~>'>
+    EDGE_LEFT_OR_RIGHT = <'<-'> (NO_SPEC | <'['> SPEC <']-'>)  <'>'>
+    EDGE_ANY_DIRECTION = <'-'> (NO_SPEC | <'['> SPEC <']-'>)
+    SPEC = <ws*> [VARIABLE] <ws*> [LABEL]
                   <ws*> [WHERE] <ws*>
+    NO_SPEC = ''
     VARIABLE = IDENTIFIER
     LABEL = <':' ws*> LABEL_EXPR
     <LABEL_EXPR> = <ws*> (LABEL_LITERAL | LABEL_ANY | LABEL_CONJUNCTION
